@@ -86,7 +86,7 @@ source ~/.bashrc
 2. Get the Zephyr source code:
 
 ```shell
-west init -m https://github.com/IteSolution/zephyr --mr ite-zephyr-v3.5.0 zephyrproject zephyrproject
+west init -m https://github.com/IteOpenSolution/zephyr.git --mr ite-zephyr-v3.5.0 zephyrproject
 cd ~/zephyrproject
 west update
 ```
@@ -280,6 +280,7 @@ The process is considered successful when the displayed message is as follows:
 
 ![ite-linux-flash-tool-16](./readme/ite-linux-flash-tool-16.png)
 
+
 3. Connect CLK, DAT, and GND from the Download Board to the corresponding pins on the IT82202 EVB.
 
 | Downlaod Board | IT82202 EVB      |
@@ -304,7 +305,7 @@ The process is considered successful when the displayed message is as follows:
 
 ```shell
 cd ~/zephyrproject/app
-git clone https://github.com/IteSolution/it82202-zephyr-application.git
+git clone https://github.com/IteOpenSolution/it82202-zephyr-application.git
 ```
 
 2. build sample 
