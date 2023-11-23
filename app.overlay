@@ -1,0 +1,126 @@
+/delete-node/ &slot0_partition;
+/delete-node/ &slot1_partition;
+/delete-node/ &storage_partition;
+/delete-node/ &flashctrl;
+
+/ {
+	chosen {
+		zephyr,flash = &flash0;
+		zephyr,flash-controller = &flashctrl;
+		zephyr,code-partition = &slot1_partition;
+	};
+	soc {
+		flashctrl: flash-controller@f01000 {
+			compatible = "ite,it8xxx2-flash-controller";
+			reg = <0x00f01000 0x100>;
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			flash0: flash@80000000 {
+				compatible = "soc-nv-flash";
+				reg = <0x80000000 0x100000>;
+				erase-block-size = <4096>;
+				write-block-size = <4>;
+			};
+		};
+	};
+};
+
+&flash0 {
+	partitions {
+		compatible = "fixed-partitions";
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		slot0_partition: partition@0 {
+			label = "nist";
+			reg = <0x0000 0xF0000>;
+		};
+
+		slot1_partition: partition@10000 {
+			label = "app";
+			reg = <0x10000 0xF0000>;
+		};
+	};
+};
+
+&i2c0 {
+	status = "okay";
+	clock-frequency = <I2C_BITRATE_FAST>;
+	pinctrl-0 = <&i2c0_clk_gpb3_default
+		     &i2c0_data_gpb4_default>;
+	pinctrl-names = "default";
+	target-enable;
+	i2c0_target: target@5b {
+		compatible = "ite,target-i2c";
+		reg = <0x5b>;
+	};
+};
+
+&i2c1 {
+	status = "okay";
+	clock-frequency = <I2C_BITRATE_FAST>;
+	pinctrl-0 = <&i2c1_clk_gpc1_default
+		     &i2c1_data_gpc2_default>;
+	pinctrl-names = "default";
+	target-enable;
+	i2c1_target: target@3a {
+		compatible = "ite,target-i2c";
+		reg = <0x3a>;
+	};
+};
+
+&i2c2 {
+	status = "okay";
+	clock-frequency = <I2C_BITRATE_FAST>;
+	pinctrl-0 = <&i2c2_clk_gpf6_default
+		     &i2c2_data_gpf7_default>;
+	pinctrl-names = "default";
+	target-enable;
+	i2c2_target: target@76 {
+		compatible = "ite,target-i2c";
+		reg = <0x76>;
+	};
+};
+
+&i2c5 {
+	status = "okay";
+	clock-frequency = <I2C_BITRATE_FAST>;
+	pinctrl-0 = <&i2c5_clk_gpa4_default
+			 &i2c5_data_gpa5_default>;
+	pinctrl-names = "default";
+};
+
+&pinctrl {
+	i2c0_clk_gpb3_default: i2c0_clk_gpb3_default {
+		gpio-voltage = "1v8";
+	};
+
+	i2c0_data_gpb4_default: i2c0_data_gpb4_default {
+		gpio-voltage = "1v8";
+	};
+
+	i2c1_clk_gpc1_default: i2c1_clk_gpc1_default {
+		gpio-voltage = "1v8";
+	};
+
+	i2c1_data_gpc2_default: i2c1_data_gpc2_default {
+		gpio-voltage = "1v8";
+	};
+
+	i2c2_clk_gpf6_default: i2c2_clk_gpf6_default {
+		gpio-voltage = "1v8";
+	};
+
+	i2c2_data_gpf7_default: i2c2_data_gpf7_default {
+		gpio-voltage = "1v8";
+	};
+
+	i2c5_clk_gpa4_default: i2c5_clk_gpa4_default {
+		gpio-voltage = "1v8";
+	};
+	
+	i2c5_data_gpa5_default: i2c5_data_gpa5_default {
+		gpio-voltage = "1v8";
+	};
+};
