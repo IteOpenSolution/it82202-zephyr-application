@@ -1,0 +1,6 @@
+# Ignore build forled
+/build
+
+# Ignore zephyr binary files
+zephyr_*.bin
+
