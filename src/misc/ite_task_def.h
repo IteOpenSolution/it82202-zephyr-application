@@ -7,7 +7,7 @@
 #ifndef _ITE_TASK_DEFINE_H__
 #define _ITE_TASK_DEFINE_H__
 
-#include <zephyr/kernel.h>
+#include "../include/include.h"
 
 #define MAX_MSG_LEN 256
 

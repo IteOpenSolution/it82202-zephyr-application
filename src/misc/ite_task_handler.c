@@ -21,21 +21,3 @@ LOG_MODULE_REGISTER(ite_task_handler, 4);
  */
 #define EC_WAIT_FOREVER (-1)
 
-void ThreadDummy1(void *p1, void *p2, void *p3)
-{
-    while(1)
-    {
-        DPRINTK(1, "ThreadDummy1 loop sleep");
-        k_sleep(K_MSEC(1000));
-    }
-}
-
-void ThreadDummy2(void *p1, void *p2, void *p3)
-{
-
-    while(1)
-    {
-        DPRINTK(1, "ThreadDummy2 loop sleep");
-        k_sleep(K_MSEC(1000));
-    }
-}

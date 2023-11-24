@@ -8,9 +8,6 @@
 
 LOG_MODULE_REGISTER(app, 4);
 
-K_THREAD_STACK_DEFINE(thread_stack_dummy1, 128);
-struct k_thread thread_dummy1;
-
 K_THREAD_STACK_DEFINE(thread_stack_acpi, 512);
 struct k_thread thread_acpi;
 
@@ -24,10 +21,6 @@ int main(void)
     board_init();
 
     Reload_EC_Ver();
-
-    k_thread_create(&thread_dummy1, thread_stack_dummy1, K_THREAD_STACK_SIZEOF(thread_stack_dummy1),
-                    ThreadDummy1, NULL, NULL, NULL,
-                    0, K_USER, K_NO_WAIT);
 
     k_thread_create(&thread_acpi, thread_stack_acpi, K_THREAD_STACK_SIZEOF(thread_stack_acpi),
                     ThreadACPI, NULL, NULL, NULL,
