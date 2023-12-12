@@ -32,6 +32,4 @@
 #include "../oem/OEM_PROJECT.h"
 #include "../oem/OEM_VER.h"
 
-#include "../test/test_ite_functions.h"
-
 #endif /* _ITE_INCLUDE_H_ */

@@ -1388,13 +1388,12 @@ void Read_HID_DeviceB(uint8_t rbuff[], uint32_t *rlength)
         HID_RdIdxB++;
     #else
         // output buffer set to HID_Descriptor_Layout
-        DPRINTK(0, "HID Descriptor Layout\n");
+        printk("HID Descriptor Layout\n");
         *rlength = wHIDDescriptorLayoutLength + 1;
         memcpy(rbuff, HID_Descriptor_Layout, wHIDDescriptorLayoutLength);
     #endif 
         HID_DeviceActived = F_HID_DESC_LAYOUT;
         HID_RdIdxB = *rlength;
-        DPRINTK_DUMP_BUFF(1, rbuff, *rlength);
     }
     else if (HID_wRegIndex_B == _REPORT_DESC_REG)
     {
@@ -1412,13 +1411,12 @@ void Read_HID_DeviceB(uint8_t rbuff[], uint32_t *rlength)
         HID_RdIdxB++;
     #else
         // output buffer set to Report_Descriptor
-        DPRINTK(1, "Report Descriptor");
+        printk("Report Descriptor");
         *rlength = sizeof(Report_Descriptor);
         memcpy(rbuff, Report_Descriptor, sizeof(Report_Descriptor));
     #endif 
         HID_DeviceActived |= F_HID_REPORT_DESC;
         HID_RdIdxB = wReportDescLengthL;
-        DPRINTK_DUMP_BUFF(0, rbuff, *rlength);
     }
     else if (HID_wRegIndex_B == _HID_COMMAND_REG)
     {
@@ -1526,7 +1524,7 @@ void Read_HID_DeviceB(uint8_t rbuff[], uint32_t *rlength)
  */
 void Process_HID2_OPCodeRead(void)
 {
-    DPRINTK(1, "Process_HID2_OPCodeRead");
+    printk("Process_HID2_OPCodeRead");
     
     if (HID_InBuf_B[4] == (HID_ITE_I2EC_REPORT_ID1 + HID_OFFSET))
     {
@@ -1558,7 +1556,7 @@ void Process_HID2_OPCodeRead(void)
  */
 void Process_HID2_OPCodeWrite(void)
 {
-    DPRINTK(1, "Process_HID2_OPCodeWrite, HID_InBuf_B[4]: 0x%x, HID_WrIdxB: 0x%x", HID_InBuf_B[4], HID_WrIdxB);
+    printk("Process_HID2_OPCodeWrite, HID_InBuf_B[4]: 0x%x, HID_WrIdxB: 0x%x", HID_InBuf_B[4], HID_WrIdxB);
 
     if (HID_InBuf_B[4] == (HID_ITE_I2EC_REPORT_ID1 + HID_OFFSET))
     {
@@ -1660,7 +1658,7 @@ void Process_HID2_OPCode(void)
     HID_RegReportID = (HID_InBuf_B[2] & 0x0F);
     HID_RegReportType = ((HID_InBuf_B[2] >> 4) & 0x0F);
 
-    DPRINTK(1, "Process_HID2_OPCode, HID_RegOPCode: 0x%x, HID_RegReportID: 0x%x, HID_RegReportType: 0x%x", 
+    printk("Process_HID2_OPCode, HID_RegOPCode: 0x%x, HID_RegReportID: 0x%x, HID_RegReportType: 0x%x", 
                                                     HID_RegOPCode, HID_RegReportID, HID_RegReportType);
 
     if (HID_RegOPCode == _HID_OPCODE_READ)          //02
@@ -1757,7 +1755,7 @@ void Process_HID2_OPCode(void)
  */
 void Process_HID2_Registers(void)
 {
-    DPRINTK(1, "Process_HID2_Registers: 0x%04x", HID_wRegIndex_B);
+    printk("Process_HID2_Registers: 0x%04x", HID_wRegIndex_B);
 
 #if 1   /* Fast Process */
     if (HID_wRegIndex_B == _HID_COMMAND_REG)            // 0x0022
@@ -1878,9 +1876,9 @@ void Process_HID2_Registers(void)
 // void Write_HID_DeviceB(void)
 void Write_HID_DeviceB(uint8_t wcmd[], uint32_t wlength)
 {
-    DPRINTK(0, "Write_HID_DeviceB");
+    printk("Write_HID_DeviceB");
 
-    DPRINTK(0, "wcmd[0] = 0x%02X, wcmd[1] = 0x%02X, wcmd[2] = 0x%02X, wlength = %d", wcmd[0], wcmd[1], wcmd[2], wlength);
+    printk("wcmd[0] = 0x%02X, wcmd[1] = 0x%02X, wcmd[2] = 0x%02X, wlength = %d", wcmd[0], wcmd[1], wcmd[2], wlength);
 
 #if NO_NEED
     /* From Host HID Write Protocol */
@@ -1908,7 +1906,7 @@ void Write_HID_DeviceB(uint8_t wcmd[], uint32_t wlength)
             HID_wRegIndex_B = (WORD)((HID_InBuf_B[1] << 8) +
                                      HID_InBuf_B[0]);
 
-            DPRINTK(1, "HID_WrIdxB = 0x%02X", HID_WrIdxB);                 
+            printk("HID_WrIdxB = 0x%02X", HID_WrIdxB);                 
             Process_HID2_Registers();
         }
 
@@ -1993,7 +1991,7 @@ void service_SlaveI2C_B(ProtocolType target, I2CCmdType action,
                         uint8_t wbuff[], uint32_t wlength,
                         uint8_t rbuff[], uint32_t *rlength)
 {
-    DPRINTK(0, "service_SlaveI2C_B");
+    printk("service_SlaveI2C_B");
 
     I2C_Tag = 0;
     HID_RdIdxB = 0;
@@ -2074,14 +2072,14 @@ void service_SlaveI2C_B(ProtocolType target, I2CCmdType action,
         {
             if ( action == Read )
             {
-                DPRINTK(0, "ACPI Read");
+                printk("ACPI Read");
                 ARG_UNUSED(wbuff);
                 ARG_UNUSED(wlength);
                 Read_ACPI_DeviceB(rbuff, rlength);
             }
             else if ( action == Write )
             {
-                DPRINTK(0, "ACPI Write");
+                printk("ACPI Write");
                 ARG_UNUSED(rbuff);
                 ARG_UNUSED(*rlength);
                 Write_ACPI_DeviceB(wbuff, wlength);
@@ -2091,14 +2089,14 @@ void service_SlaveI2C_B(ProtocolType target, I2CCmdType action,
         {
             if ( action == Read ) // read = 1
             {
-                DPRINTK(0, "HID Read");
+                printk("HID Read");
                 ARG_UNUSED(wbuff);
                 ARG_UNUSED(wlength);
                 Read_HID_DeviceB(rbuff, rlength);
             }
             else if ( action == Write )
             {
-                DPRINTK(0, "HID Write");
+                printk("HID Write");
                 ARG_UNUSED(rbuff);
                 ARG_UNUSED(*rlength);
                 Write_HID_DeviceB(wbuff, wlength);

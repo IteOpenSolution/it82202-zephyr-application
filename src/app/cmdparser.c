@@ -10,7 +10,7 @@ void ThreadACPI(void *p1, void *p2, void *p3)
 {
     while(1)
     {
-        DPRINTK(1, "ThreadACPI loop sleep");
+        printk("ThreadACPI loop sleep");
         k_sleep(K_MSEC(1000));
     }
 }

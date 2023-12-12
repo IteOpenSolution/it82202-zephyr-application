@@ -184,7 +184,7 @@ void WriteSCI_Buffer(BYTE SCI_NUM, BYTE PRIORITY)
 
     if (i == SCIEVT_RIDX)
     {
-        DPRINTK("\nSCI_LOSE[%bX]", SCI_NUM);
+        printk("\nSCI_LOSE[%bX]", SCI_NUM);
         SCIEVT_LOSE++;
         Clear_SCI_Buffer();
         return;
@@ -192,7 +192,7 @@ void WriteSCI_Buffer(BYTE SCI_NUM, BYTE PRIORITY)
     SCIEVT_BUF[SCIEVT_WIDX] = SCI_NUM;
     SCIEVT_WIDX = i;
     DebugUartTimeStamp(1);
-    DPRINTK("\nSCIIN[%bX]", SCI_NUM);
+    printk("\nSCIIN[%bX]", SCI_NUM);
 #endif /* TODO */
 }
 #if UNUSED
@@ -225,7 +225,7 @@ void Clear_SCI_Buffer(void)
  */
 BYTE AcpiReadData_I2C_AB(uint8_t rbuff[], uint32_t *rlength)
 {
-    DPRINTK(1, "AcpiReadData_I2C_AB");
+    printk("AcpiReadData_I2C_AB");
 
     if (xHI2C_AcpiCmdCode == _CMD_DATA_BUFFER_READ) // 0xA1
     {
@@ -268,22 +268,22 @@ BYTE AcpiReadData_I2C_AB(uint8_t rbuff[], uint32_t *rlength)
         }
         return ITempB01;
 #else
-        DPRINTK(1, "_CMD_THERMAL_CMD_GROUP");
-        DPRINTK(1, "0x%X, 0x%X, 0x%X", FAN_XPntr[0], FAN_XPntr[1], FAN_XPntr[2]);
+        printk("_CMD_THERMAL_CMD_GROUP");
+        printk("0x%X, 0x%X, 0x%X", FAN_XPntr[0], FAN_XPntr[1], FAN_XPntr[2]);
 
         if (FAN_XPntr[0] == 1)
         {
-            DPRINTK(1, "(FAN_XPntr[0] == 1)");
+            printk("(FAN_XPntr[0] == 1)");
             *rlength = 1;
             rbuff[0] = FAN_XPntr[1];
         }
         else if (FAN_XPntr[0] > 1)
         {
-             DPRINTK(1, "(FAN_XPntr[0] > 1)");
+             printk("(FAN_XPntr[0] > 1)");
             *rlength = FAN_XPntr[0] + 1;            // length byte + data bytes
             memcpy((void *)(rbuff), (const void *)(FAN_XPntr), *rlength);
         }
-        DPRINTK(1, "return");
+        printk("return");
         return *rlength;
         
 
@@ -447,7 +447,7 @@ struct OEM_ACPI_W acpi_cmd_function[] = {
 
 void AcpiWriteA0(uint8_t wbuff[], uint32_t wlength)
 {
-    DPRINTK(1, "AcpiWriteA0");
+    printk("AcpiWriteA0");
 
     HID_XPntr = (volatile XWORD *)&FLASH_BUF[0];
     xHI2C_DataReadyA0 = 0xA0;
@@ -455,19 +455,19 @@ void AcpiWriteA0(uint8_t wbuff[], uint32_t wlength)
 
 void AcpiWriteA1(uint8_t wbuff[], uint32_t wlength)
 {
-    DPRINTK(1, "AcpiWriteA1");
+    printk("AcpiWriteA1");
     HID_XPntr = (volatile XWORD *)&FLASH_BUF[0];
 }
 
 void AcpiWriteA2(uint8_t wbuff[], uint32_t wlength)
 {
-    DPRINTK(1, "AcpiWriteA2");
+    printk("AcpiWriteA2");
     HID_XPntr = (volatile XWORD *)&FLASH_BUF[0];
 }
 
 void AcpiWrite20(uint8_t wbuff[], uint32_t wlength)
 {
-    DPRINTK(1, "AcpiWrite20");
+    printk("AcpiWrite20");
     xHI2C_AcpiCmdCode2 = wbuff[1];
 
     xHLOS_TMPR[0] = wbuff[2];       // length
@@ -485,7 +485,7 @@ void AcpiWrite20(uint8_t wbuff[], uint32_t wlength)
 
 void AcpiWrite21(uint8_t wbuff[], uint32_t wlength)
 {
-    DPRINTK(1, "AcpiWrite21");
+    printk("AcpiWrite21");
 
     // Byte 1: Bit7..2 Reserved, Bit1:Fan Failed, Bit0: 1-Fan on, 0-Fan Off
     // Notes: Without byte count
@@ -510,7 +510,7 @@ void AcpiWrite21(uint8_t wbuff[], uint32_t wlength)
 
 void AcpiWrite22(uint8_t wbuff[], uint32_t wlength)
 {
-    DPRINTK(1, "AcpiWrite22");
+    printk("AcpiWrite22");
 
     xHI2C_AcpiCmdCode2 = wbuff[1];
     if (xHI2C_AcpiCmdCode2 == 0x01) // Fan#1
@@ -535,7 +535,7 @@ void AcpiWrite22(uint8_t wbuff[], uint32_t wlength)
 
 void AcpiWrite23(uint8_t wbuff[], uint32_t wlength)
 {
-    DPRINTK(1, "AcpiWrite23");
+    printk("AcpiWrite23");
 
     xHI2C_AcpiCmdCode2 = wbuff[1];
 
@@ -547,11 +547,11 @@ void AcpiWrite23(uint8_t wbuff[], uint32_t wlength)
 
 void AcpiWrite24(uint8_t wbuff[], uint32_t wlength)
 {
-    DPRINTK(1, "AcpiWrite24");
+    printk("AcpiWrite24");
     FAN_XPntr = &xFAN_ProfileSwitch[0];
     FAN_XPntr_wLen = 0;
 
-    DPRINTK(1, "_CMD_FAN_PROFILE_SWITCH");
+    printk("_CMD_FAN_PROFILE_SWITCH");
 
     xHI2C_AcpiCmdCode2 = wbuff[1];
     if (((xHI2C_AcpiCmdCode2 & 0x0F) > 0) && ((xHI2C_AcpiCmdCode2 & 0x0F) < 8))
@@ -571,7 +571,7 @@ void AcpiWrite24(uint8_t wbuff[], uint32_t wlength)
 
 void AcpiWrite25(uint8_t wbuff[], uint32_t wlength)
 {
-    DPRINTK(1, "AcpiWrite25");
+    printk("AcpiWrite25");
     xHI2C_AcpiCmdCode2 = wbuff[1];
 
     Fan1_EventDelay = 10; // Delay 500ms
@@ -625,7 +625,7 @@ void AcpiWrite25(uint8_t wbuff[], uint32_t wlength)
 
 void AcpiWrite26(uint8_t wbuff[], uint32_t wlength)
 {
-    // DPRINTK(1, "AcpiWrite26");
+    // printk("AcpiWrite26");
     xHI2C_AcpiCmdCode2 = wbuff[1];
     if (xHI2C_AcpiCmdCode2 == 0x01)
     {
@@ -643,7 +643,7 @@ void AcpiWrite26(uint8_t wbuff[], uint32_t wlength)
 
 void AcpiWrite27(uint8_t wbuff[], uint32_t wlength)
 {
-    DPRINTK(1, "AcpiWrite27");
+    printk("AcpiWrite27");
     xHI2C_AcpiCmdCode2 = wbuff[1];
 
     ITempB06 = xHI2C_AcpiCmdCode2 & 0x0F;
@@ -664,18 +664,18 @@ void AcpiWrite27(uint8_t wbuff[], uint32_t wlength)
 void AcpiWrite28(uint8_t wbuff[], uint32_t wlength)
 {
     // TODO: using QC machine would get 1 more bytes
-    DPRINTK(1, "AcpiWrite28");
+    printk("AcpiWrite28");
     xHI2C_AcpiCmdCode2 = wbuff[1];
     xHI2C_AcpiCmdCode3 = wbuff[2];
 
     xFanProfileNum = xHI2C_AcpiCmdCode2 >> 4;
     xFanLUTsNum = xHI2C_AcpiCmdCode3 - 1;
 
-    DPRINTK(2, "xRamProfileNum %x", xRamProfileNum);
-    DPRINTK(2, "xFanProfileNum %x", xFanProfileNum);
-    DPRINTK(2, "xFanLUTsNum %x", xFanLUTsNum);
+    printk("xRamProfileNum %x", xRamProfileNum);
+    printk("xFanProfileNum %x", xFanProfileNum);
+    printk("xFanLUTsNum %x", xFanLUTsNum);
 
-    DPRINTK(2, "xFanProfileNum %x", xFanProfileNum);
+    printk("xFanProfileNum %x", xFanProfileNum);
 
     if (/*(xRamProfileNum == xFanProfileNum) &&*/ (xFanLUTsNum < 8) &&
         (xFanProfileNum > 0) && (xFanProfileNum < 8))
@@ -696,7 +696,7 @@ void AcpiWrite28(uint8_t wbuff[], uint32_t wlength)
 
 void AcpiWrite29(uint8_t wbuff[], uint32_t wlength)
 {
-    DPRINTK(1, "AcpiWriteOther, 0x29 ~ 0x2F");
+    printk("AcpiWriteOther, 0x29 ~ 0x2F");
     if ((wbuff[0] > 0x28) && (wbuff[0] < 0x30))
     {
         ITempB01 = xHI2C_AcpiCmdCode - 0x29;
@@ -711,7 +711,7 @@ void AcpiWrite29(uint8_t wbuff[], uint32_t wlength)
 
 void AcpiWrite30(uint8_t wbuff[], uint32_t wlength)
 {
-    DPRINTK(1, "AcpiWrite30");
+    printk("AcpiWrite30");
 
     memcpy((void *)xFAN_QC_TEST, wbuff + 2, 5);
 
@@ -720,7 +720,7 @@ void AcpiWrite30(uint8_t wbuff[], uint32_t wlength)
 
 void AcpiWrite32(uint8_t wbuff[], uint32_t wlength)
 {
-    DPRINTK(1, "AcpiWrite32");
+    printk("AcpiWrite32");
 
     ITempB01 = wbuff[1];
     ITempB02 = (ITempB01 - 1) & 0x07;
@@ -737,7 +737,7 @@ void AcpiWrite32(uint8_t wbuff[], uint32_t wlength)
 
 void AcpiWrite34(uint8_t wbuff[], uint32_t wlength)
 {
-    DPRINTK(1, "AcpiWrite34");
+    printk("AcpiWrite34");
 
     FAN_XPntr = &xNTC_SampleRate[0];
 
@@ -747,7 +747,7 @@ void AcpiWrite34(uint8_t wbuff[], uint32_t wlength)
 
 void AcpiWriteEB(uint8_t wbuff[], uint32_t wlength)
 {
-    DPRINTK(1, "AcpiWriteEB");
+    printk("AcpiWriteEB");
 
     xFSH_A2_BYTECNT = 1;
     ITempB02 = 0x80;
@@ -777,7 +777,7 @@ void AcpiWriteEB(uint8_t wbuff[], uint32_t wlength)
 
 void subfunc_xHI2C_AcpiCmdCode3(uint8_t xHI2C_AcpiCmdCode, uint8_t xHI2C_AcpiCmdCode2, uint8_t xHI2C_AcpiCmdCode3)
 {
-    DPRINTK(1, "subfunc_xHI2C_AcpiCmdCode3");
+    printk("subfunc_xHI2C_AcpiCmdCode3");
     // xHI2C_AcpiCmdCode3 = PktData;
     if (xHI2C_AcpiCmdCode == _CMD_SET_NTC_SAMPLE_RATE) // 0x34 //W1RW2
     {
@@ -807,7 +807,7 @@ void subfunc_xHI2C_AcpiCmdCode3(uint8_t xHI2C_AcpiCmdCode, uint8_t xHI2C_AcpiCmd
 
 void subfunc_xHI2C_AcpiCmdCode2(uint8_t xHI2C_AcpiCmdCode, uint8_t xHI2C_AcpiCmdCode2, uint8_t wcmd[], uint8_t wlength)
 {
-    DPRINTK(1, "subfunc_xHI2C_AcpiCmdCode2");
+    printk("subfunc_xHI2C_AcpiCmdCode2");
     ITempB06 = xHI2C_AcpiCmdCode & 0xF0;
     if (!((ITempB06 == _CMD_THERMAL_CMD_GROUP) || (ITempB06 == _CMD_THERMAL_CMD_GROUP2))) // 0x2X or 0x3X
     {
@@ -870,12 +870,12 @@ void subfunc_xHI2C_AcpiCmdCode2(uint8_t xHI2C_AcpiCmdCode, uint8_t xHI2C_AcpiCmd
 
     case _CMD_FAN_PROFILE_SWITCH: // 0x24
     {
-        DPRINTK(1, "_CMD_FAN_PROFILE_SWITCH");
+        printk("_CMD_FAN_PROFILE_SWITCH");
         if (((xHI2C_AcpiCmdCode2 & 0x0F) > 0) && ((xHI2C_AcpiCmdCode2 & 0x0F) < 8))
         {
             xFAN_ProfileSwitch[0] = 1; // length
             xFAN_ProfileSwitch[1] = xHI2C_AcpiCmdCode2;
-            DPRINTK(1, "%x %x", xFAN_ProfileSwitch[0], xFAN_ProfileSwitch[1]);
+            printk("%x %x", xFAN_ProfileSwitch[0], xFAN_ProfileSwitch[1]);
             TFanProfileSwitch = xHI2C_AcpiCmdCode2 & 0x0F;
             xFanProfileNum = TFanProfileSwitch;
             Load_FanProfileToRam(TFanProfileSwitch);
@@ -889,7 +889,7 @@ void subfunc_xHI2C_AcpiCmdCode2(uint8_t xHI2C_AcpiCmdCode, uint8_t xHI2C_AcpiCmd
 
     case _CMD_FAN_TRIP_POINT: // 0x25
     {
-        DPRINTK(1, "_CMD_FAN_TRIP_POINT");
+        printk("_CMD_FAN_TRIP_POINT");
         Fan1_EventDelay = 10; // Delay 500ms
         Fan2_EventDelay = 10; // Delay 500ms
         FAN_XPntr_wLen = 3;
@@ -997,7 +997,7 @@ void subfunc_xHI2C_AcpiCmdCode2(uint8_t xHI2C_AcpiCmdCode, uint8_t xHI2C_AcpiCmd
 void subfunc_xHI2C_AcpiCmdCode(uint8_t *acpi_cmd_code1)
 {
     FAN_XPntr_wLen = 0;
-    DPRINTK(1, "subfunc_xHI2C_AcpiCmdCode");
+    printk("subfunc_xHI2C_AcpiCmdCode");
     switch (*acpi_cmd_code1)
     {
     case _CMD_DATA_BUFFER_WRITE:    // A0
@@ -1071,8 +1071,8 @@ void subfunc_xHI2C_AcpiCmdCode(uint8_t *acpi_cmd_code1)
  */
 void AcpiWriteData_I2C_AB(uint8_t wcmd[], uint32_t wlength)
 {
-    DPRINTK(1, "AcpiWriteData_I2C_AB, wlength: 0x%x", wlength);
-    DPRINTK(1, "wcmd: 0x%x, 0x%x, 0x%x, 0x%x, 0x%x", wcmd[0], wcmd[1], wcmd[2], wcmd[3], wcmd[4]);
+    printk("AcpiWriteData_I2C_AB, wlength: 0x%x", wlength);
+    printk("wcmd: 0x%x, 0x%x, 0x%x, 0x%x, 0x%x", wcmd[0], wcmd[1], wcmd[2], wcmd[3], wcmd[4]);
 
     PMC_WrIdx = wlength;
     memcpy((void *)PMC_InBuf, wcmd, wlength);
@@ -1081,7 +1081,7 @@ void AcpiWriteData_I2C_AB(uint8_t wcmd[], uint32_t wlength)
     xHI2C_AcpiCmdCode2 = wcmd[1];
     xHI2C_AcpiCmdCode3 = wcmd[2];
 
-    DPRINTK(1, "xHI2C_AcpiCmdCode: 0x%X, xHI2C_AcpiCmdCode2: 0x%x, xHI2C_AcpiCmdCode3: 0x%x", xHI2C_AcpiCmdCode, xHI2C_AcpiCmdCode2, xHI2C_AcpiCmdCode3);
+    printk("xHI2C_AcpiCmdCode: 0x%X, xHI2C_AcpiCmdCode2: 0x%x, xHI2C_AcpiCmdCode3: 0x%x", xHI2C_AcpiCmdCode, xHI2C_AcpiCmdCode2, xHI2C_AcpiCmdCode3);
 
     subfunc_xHI2C_AcpiCmdCode((uint8_t *)&xHI2C_AcpiCmdCode);
 
@@ -1101,7 +1101,7 @@ void AcpiWriteData_I2C_AB(uint8_t wcmd[], uint32_t wlength)
         }
     }
 
-    DPRINTK(1, "Unknow Acpi CMD: 0x%x", xHI2C_AcpiCmdCode);
+    printk("Unknow Acpi CMD: 0x%x", xHI2C_AcpiCmdCode);
 
 #endif
 #if NO_NEED

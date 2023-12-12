@@ -10,7 +10,7 @@ void ThreadThermalMgm(void *p1, void *p2, void *p3)
 {
     while(1)
     {
-        DPRINTK(1, "ThreadThermalMgm loop sleep");
+        printk("ThreadThermalMgm loop sleep");
         k_msleep(1000);
     }
 }

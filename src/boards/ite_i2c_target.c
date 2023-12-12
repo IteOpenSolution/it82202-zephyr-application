@@ -87,7 +87,7 @@ static int i2c_ite_target_read_processed(struct i2c_target_config *config,
 
 static int i2c_ite_target_stop(struct i2c_target_config *config)
 {
-	// DPRINTK(1, "[target]: target stop");
+	// printk("[target]: target stop");
 
 	return 0;
 }
@@ -97,14 +97,13 @@ static void i2c_ite_target_buf_write_received(struct i2c_target_config *config,
 					      uint8_t *ptr, uint32_t len)
 {
 #if ITE_I2C_DEV_TEST_EN
-	DPRINTK(1, "[target]: w-ptr=%p, len=%d", (void *)ptr, len);
+	printk("[target]: w-ptr=%p, len=%d", (void *)ptr, len);
 
 #else
 	struct I2cAddressInfo TargetInfor = get_i2c_address(config);
-    DPRINTK(1, "i2c_ite_target_buf_write_received");
-    DPRINTK(1, "\tTargetInfor: main_address = %x, id = %x", TargetInfor.main_address, TargetInfor.id);  
-    DPRINTK(1, "\tbuffer addr: %p, lenth: %d", (void *)ptr, len);
-    DPRINTK_DUMP_BUFF(1, ptr, len);
+    printk("i2c_ite_target_buf_write_received");
+    printk("\tTargetInfor: main_address = %x, id = %x", TargetInfor.main_address, TargetInfor.id);  
+    printk("\tbuffer addr: %p, lenth: %d", (void *)ptr, len);
     // in the design of it8987, the function - main_service(), 
     // via some conditions to process  or service_SlaveI2C_B()
     // here we depend on the address and id to determine which function to call
@@ -114,11 +113,11 @@ static void i2c_ite_target_buf_write_received(struct i2c_target_config *config,
 
     if (TargetInfor.main_address == AllI2cAddr[0].addr && TargetInfor.id == 1)
     {   // we do not receive cmd after pre-define function enable 
-		DPRINTK(1, "\tpre-define function");
+		printk("\tpre-define function");
     }
     else if (TargetInfor.main_address == AllI2cAddr[1].addr && TargetInfor.id == 1)
     {   // HID write
-        DPRINTK(0, "\tHidOverI2cWriteCmdParser");
+        printk("\tHidOverI2cWriteCmdParser");
         // HidOverI2cWriteCmdParser() is similiar to Write_HID_DeviceB()
         // deal HID write cmd
         HidOverI2cWriteCmdParser(ptr, len);
@@ -127,7 +126,7 @@ static void i2c_ite_target_buf_write_received(struct i2c_target_config *config,
     //          TargetInfor.id == 2)
     else if ( TargetInfor.main_address == 0xEC || TargetInfor.main_address == 0x76 || 1 )
     {   // ACPI write
-        DPRINTK(1, "\tAcpiOverI2cWriteCmdParser");
+        printk("\tAcpiOverI2cWriteCmdParser");
         // AcpiWCmdParser() is similiar to Write_ACPI_DeviceB()
         // deal acpi write cmd
         AcpiOverI2cWriteCmdParser(ptr, len);
@@ -146,20 +145,20 @@ static int i2c_ite_target_buf_read_requested(struct i2c_target_config *config,
 		r_datas[i] = 0xcc;
 	}
 	*ptr = r_datas;
-	DPRINTK(1, "[target]: r-ptr=%p", (void *)*ptr);
+	printk("[target]: r-ptr=%p", (void *)*ptr);
 
 	return 0;
 
 #else
     struct I2cAddressInfo TargetInfor = get_i2c_address(config);
-    DPRINTK(1, "i2c_ite_target_buf_read_requested");
+    printk("i2c_ite_target_buf_read_requested");
     if (TargetInfor.main_address == AllI2cAddr[0].addr && TargetInfor.id == 1)
     {   // we do not receive cmd after pre-define function enable 
-		DPRINTK(0, "\tpre-define function");
+		printk("\tpre-define function");
     }
     else if (TargetInfor.main_address == AllI2cAddr[1].addr && TargetInfor.id == 1)
     {   // HID read
-        DPRINTK(0, "\tHidOverI2cReadCmdParser");
+        printk("\tHidOverI2cReadCmdParser");
         // HidOverI2cWriteCmdParser() is similiar to Write_HID_DeviceB()
         // deal HID write cmd
         HidOverI2cReadCmdParser(&*ptr, len);
@@ -168,7 +167,7 @@ static int i2c_ite_target_buf_read_requested(struct i2c_target_config *config,
             //  TargetInfor.id == 2)
     else
     {   // ACPI read
-        DPRINTK(1, "\tAcpiOverI2cReadCmdParser");
+        printk("\tAcpiOverI2cReadCmdParser");
         // AcpiWCmdParser() is similiar to Write_ACPI_DeviceB()
         // deal acpi write cmd
         AcpiOverI2cReadCmdParser(&*ptr, len);
@@ -196,7 +195,7 @@ static int i2c_ite_target_register(const struct device *dev)
 	const struct i2c_target_dev_config *cfg = dev->config;
 	struct i2c_target_data *data = dev->data;
 
-	DPRINTK(1, "[target]i2c target register");
+	printk("[target]i2c target register");
 
 	return i2c_target_register(cfg->bus.bus, &data->config);
 }
@@ -206,7 +205,7 @@ static int i2c_ite_target_unregister(const struct device *dev)
 	const struct i2c_target_dev_config *cfg = dev->config;
 	struct i2c_target_data *data = dev->data;
 
-	DPRINTK(1, "[target]i2c target unregister");
+	printk("[target]i2c target unregister");
 
 	return i2c_target_unregister(cfg->bus.bus, &data->config);
 }
@@ -221,8 +220,8 @@ static int i2c_ite_target_init(const struct device *dev)
 	const struct i2c_target_dev_config *cfg = dev->config;
 	struct i2c_target_data *data = dev->data;
 
-	DPRINTK(1, "[target]i2c_target_init i2c target bus=%p",cfg->bus.bus); //I2C5 node
-	DPRINTK(1, "[target]i2c_target_init i2c target dev=%p",dev); //I2C target
+	printk("[target]i2c_target_init i2c target bus=%p",cfg->bus.bus); //I2C5 node
+	printk("[target]i2c_target_init i2c target dev=%p",dev); //I2C target
 
 	/* Check I2C controller ready. */
 	if (!device_is_ready(cfg->bus.bus)) {
@@ -260,7 +259,7 @@ DT_INST_FOREACH_STATUS_OKAY(I2C_ITE_TARGET_INIT)
 int ite_i2c_target_init(void)
 {
     uint32_t ret;
-    DPRINTK(1, "ite_i2c_target_init");
+    printk("ite_i2c_target_init");
 #if 0
     struct i2c_bus_config
     {
@@ -286,11 +285,11 @@ int ite_i2c_target_init(void)
         if (ret)
         {
             // Handle target registration failure
-            DPRINTK(1, "I2C%d target register failed\n", i);
+            printk("I2C%d target register failed\n", i);
         }
         else
         {
-            DPRINTK(1, "I2C%d target register success, address: 0x%02x\n", i, AllI2cAddr[i].addr);
+            printk("I2C%d target register success, address: 0x%02x\n", i, AllI2cAddr[i].addr);
         }
     }
 #else
@@ -298,22 +297,22 @@ int ite_i2c_target_init(void)
     if (ret)
     {
         // Handle target registration failure
-        DPRINTK(1, "I2C%d target register failed\n", 0);
+        printk("I2C%d target register failed\n", 0);
     }
     else
     {
-        DPRINTK(1, "I2C%d target register success, address: 0x%02x\n", 0, AllI2cAddr[0].addr);
+        printk("I2C%d target register success, address: 0x%02x\n", 0, AllI2cAddr[0].addr);
     }
 
     ret = i2c_target_driver_register(i2c1_target_dev);
     if (ret)
     {
         // Handle target registration failure
-        DPRINTK(1, "I2C%d target register failed\n", 1);
+        printk("I2C%d target register failed\n", 1);
     }
     else
     {
-        DPRINTK(1, "I2C%d target register success, address: 0x%02x\n", 1, AllI2cAddr[1].addr);
+        printk("I2C%d target register success, address: 0x%02x\n", 1, AllI2cAddr[1].addr);
     }
 #endif
     return 0;
@@ -332,14 +331,14 @@ int ite_i2c_target_deinit(void)
 #if 0
     const struct device *const i2c_target_dev;
     uint8_t ret = 0;
-    DPRINTK(1, "i2c_target_driver_unregister");
+    printk("i2c_target_driver_unregister");
 
     for ( uint8_t i = 0; i < 5; i++)
     {
         ret = i2c_target_driver_unregister(i2c_target_dev);
         if (ret)
         {
-            DPRINTK(1, "I2C target unregister failed");
+            printk("I2C target unregister failed");
             return ret;
         }
     }
