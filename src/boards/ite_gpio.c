@@ -19,17 +19,17 @@ void Hid_Interrupt_Pin_Toggle(void)
 {
 	int ret;
 
-	DPRINTK(1, "Hid_Interrupt_Pin_Toggle");
+	printk("Hid_Interrupt_Pin_Toggle");
 
 	ret = gpio_pin_toggle_dt(&led);
 	if (ret < 0) {
-		DPRINTK(1, "gpio pin I2C1_INT toggle failed");
+		printk("gpio pin I2C1_INT toggle failed");
 	}
 	k_busy_wait(HidIntDelay_1ms);
 
 	ret = gpio_pin_toggle_dt(&led);
 	if (ret < 0) {
-		DPRINTK(1, "gpio pin I2C1_INT toggle failed");
+		printk("gpio pin I2C1_INT toggle failed");
 	}
 #if 0
 	k_busy_wait(HidIntDelay_1ms);
@@ -40,16 +40,16 @@ void ite_gpio_init(void)
 {
 	int ret;
 
-	DPRINTK(1, "ite_gpio_init");
+	printk("ite_gpio_init");
 
 	if (!gpio_is_ready_dt(&led)) {
-		DPRINTK(1, "gpio pin I2C1_INT not ready");
+		printk("gpio pin I2C1_INT not ready");
 		// return 0;
 	}
 
 	ret = gpio_pin_configure_dt(&led, GPIO_OUTPUT_ACTIVE);
 	if (ret < 0) {
-		DPRINTK(1, "gpio pin I2C1_INT configure_dt failed");
+		printk("gpio pin I2C1_INT configure_dt failed");
 		// return 0;
 	}
 }

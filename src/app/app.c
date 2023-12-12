@@ -16,7 +16,7 @@ struct k_thread thread_thermalmgm;
 
 int main(void)
 {
-    DPRINTK(1, "Hello IT82202, %s", EC_VER);
+    printk("Hello IT82202, %s", EC_VER);
 
     board_init();
 
@@ -32,7 +32,7 @@ int main(void)
 
     while(1)
     {
-        DPRINTK(1, "main");
+        printk("main");
         k_msleep(1000);
     }
     

@@ -10,7 +10,7 @@ LOG_MODULE_REGISTER(ite_board_init, 4);
 
 void board_init(void)
 {
-    DPRINTK(1, "Board init");
+    printk("Board init");
 
     ite_gpio_init();
     
