@@ -29,7 +29,6 @@ int main(void)
     k_thread_create(&thread_thermalmgm, thread_stack_thermalmgm, K_THREAD_STACK_SIZEOF(thread_stack_thermalmgm),
                     ThreadThermalMgm, NULL, NULL, NULL,
                     0, K_USER, K_NO_WAIT);
-
     while(1)
     {
         DPRINTK(1, "main");

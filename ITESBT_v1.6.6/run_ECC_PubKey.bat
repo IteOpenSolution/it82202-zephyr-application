@@ -1,0 +1,1 @@
+ITESBT /infile:ftx14.bin /prvkey:EccSecp256r1_private.pem /outfile:release_ECC_PubKey.bin /pubkey:EccSecp256r1_public.pem

@@ -8,6 +8,9 @@
 
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
+#include <zephyr/drivers/flash.h>
+#include <zephyr/drivers/bbram.h>
+#include "chip_chipregs.h"
 
 #include "../app/cmdparser.h"
 #include "../app/thermalmgm.h"
@@ -31,6 +34,7 @@
 #include "../oem/OEM_Memory.h"
 #include "../oem/OEM_PROJECT.h"
 #include "../oem/OEM_VER.h"
+#include "../oem/OEM_NIST.h"
 
 #include "../test/test_ite_functions.h"
 

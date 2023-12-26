@@ -7,6 +7,8 @@
 target_sources(app
     PRIVATE 
     ${CMAKE_CURRENT_LIST_DIR}/app.c
+    PRIVATE 
+    ${CMAKE_CURRENT_LIST_DIR}/version.c
     PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/version.h
     )   

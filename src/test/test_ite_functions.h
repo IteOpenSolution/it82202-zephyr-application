@@ -9,6 +9,7 @@
 
 #include "../include/include.h"
 
+#define ITE_DPRINTK_EN 1
 #if ITE_DPRINTK_EN
 
 #define DEBUG_MSG_LEVEL_1_EN   true

@@ -1,0 +1,1 @@
+ITESBT /infile:ftx14.bin /prvkey:RsaTony_private.pem /outfile:release_RSA_PubKey.bin /pubkey:RsaTony_public_pkcs1.pem
