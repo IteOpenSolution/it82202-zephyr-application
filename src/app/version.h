@@ -11,7 +11,7 @@
 #define _BUILD_GUEST        "ODM$"
 #define _BUILD_BOARD        "MB:00$"
 #define _BUILD_MAIN_FW_ADDR "008000"
-#define _BUILD_DATE         "2023/12/11$"
-#define _BUILD_TIME         "15:02:37$"
+#define _BUILD_DATE         "2024/01/02$"
+#define _BUILD_TIME         "15:17:33$"
 
-#define EC_VER "EC VER:00.00.00$ LsFv:00.00.00$ Qualcomm$ Wos 8c GenX$ ODM$ MB:00$ BUILD DATE: 2023/12/11$ TIME: 15:02:37$ MAIN_FW_ADDR:008000"
+#define EC_VER "EC VER:00.00.00$ LsFv:00.00.00$ Qualcomm$ Wos 8c GenX$ ODM$ MB:00$ BUILD DATE: 2024/01/02$ TIME: 15:17:33$ MAIN_FW_ADDR:008000"

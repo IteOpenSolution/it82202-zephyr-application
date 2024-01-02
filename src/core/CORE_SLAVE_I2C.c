@@ -1388,7 +1388,6 @@ void Read_HID_DeviceB(uint8_t rbuff[], uint32_t *rlength)
         HID_RdIdxB++;
     #else
         // output buffer set to HID_Descriptor_Layout
-        printk("HID Descriptor Layout\n");
         *rlength = wHIDDescriptorLayoutLength + 1;
         memcpy(rbuff, HID_Descriptor_Layout, wHIDDescriptorLayoutLength);
     #endif 
@@ -1411,7 +1410,6 @@ void Read_HID_DeviceB(uint8_t rbuff[], uint32_t *rlength)
         HID_RdIdxB++;
     #else
         // output buffer set to Report_Descriptor
-        printk("Report Descriptor");
         *rlength = sizeof(Report_Descriptor);
         memcpy(rbuff, Report_Descriptor, sizeof(Report_Descriptor));
     #endif 
@@ -1523,9 +1521,7 @@ void Read_HID_DeviceB(uint8_t rbuff[], uint32_t *rlength)
  * @note     - None
  */
 void Process_HID2_OPCodeRead(void)
-{
-    printk("Process_HID2_OPCodeRead");
-    
+{  
     if (HID_InBuf_B[4] == (HID_ITE_I2EC_REPORT_ID1 + HID_OFFSET))
     {
         //HID_ITE_I2EC_REPORT_ID1+HID_OFFSET
@@ -1556,8 +1552,6 @@ void Process_HID2_OPCodeRead(void)
  */
 void Process_HID2_OPCodeWrite(void)
 {
-    printk("Process_HID2_OPCodeWrite, HID_InBuf_B[4]: 0x%x, HID_WrIdxB: 0x%x", HID_InBuf_B[4], HID_WrIdxB);
-
     if (HID_InBuf_B[4] == (HID_ITE_I2EC_REPORT_ID1 + HID_OFFSET))
     {
         /* HID_InBuf_B[10] = ITE Command
@@ -1658,9 +1652,6 @@ void Process_HID2_OPCode(void)
     HID_RegReportID = (HID_InBuf_B[2] & 0x0F);
     HID_RegReportType = ((HID_InBuf_B[2] >> 4) & 0x0F);
 
-    printk("Process_HID2_OPCode, HID_RegOPCode: 0x%x, HID_RegReportID: 0x%x, HID_RegReportType: 0x%x", 
-                                                    HID_RegOPCode, HID_RegReportID, HID_RegReportType);
-
     if (HID_RegOPCode == _HID_OPCODE_READ)          //02
     {
         /* Get Feature */
@@ -1755,8 +1746,6 @@ void Process_HID2_OPCode(void)
  */
 void Process_HID2_Registers(void)
 {
-    printk("Process_HID2_Registers: 0x%04x", HID_wRegIndex_B);
-
 #if 1   /* Fast Process */
     if (HID_wRegIndex_B == _HID_COMMAND_REG)            // 0x0022
     {
@@ -1876,10 +1865,6 @@ void Process_HID2_Registers(void)
 // void Write_HID_DeviceB(void)
 void Write_HID_DeviceB(uint8_t wcmd[], uint32_t wlength)
 {
-    printk("Write_HID_DeviceB");
-
-    printk("wcmd[0] = 0x%02X, wcmd[1] = 0x%02X, wcmd[2] = 0x%02X, wlength = %d", wcmd[0], wcmd[1], wcmd[2], wlength);
-
 #if NO_NEED
     /* From Host HID Write Protocol */
     ITempB01 = SLDA_B;
@@ -1906,7 +1891,6 @@ void Write_HID_DeviceB(uint8_t wcmd[], uint32_t wlength)
             HID_wRegIndex_B = (WORD)((HID_InBuf_B[1] << 8) +
                                      HID_InBuf_B[0]);
 
-            printk("HID_WrIdxB = 0x%02X", HID_WrIdxB);                 
             Process_HID2_Registers();
         }
 
@@ -1991,8 +1975,6 @@ void service_SlaveI2C_B(ProtocolType target, I2CCmdType action,
                         uint8_t wbuff[], uint32_t wlength,
                         uint8_t rbuff[], uint32_t *rlength)
 {
-    printk("service_SlaveI2C_B");
-
     I2C_Tag = 0;
     HID_RdIdxB = 0;
     HID_WrIdxB = 0;
@@ -2072,14 +2054,12 @@ void service_SlaveI2C_B(ProtocolType target, I2CCmdType action,
         {
             if ( action == Read )
             {
-                printk("ACPI Read");
                 ARG_UNUSED(wbuff);
                 ARG_UNUSED(wlength);
                 Read_ACPI_DeviceB(rbuff, rlength);
             }
             else if ( action == Write )
             {
-                printk("ACPI Write");
                 ARG_UNUSED(rbuff);
                 ARG_UNUSED(*rlength);
                 Write_ACPI_DeviceB(wbuff, wlength);
@@ -2089,14 +2069,12 @@ void service_SlaveI2C_B(ProtocolType target, I2CCmdType action,
         {
             if ( action == Read ) // read = 1
             {
-                printk("HID Read");
                 ARG_UNUSED(wbuff);
                 ARG_UNUSED(wlength);
                 Read_HID_DeviceB(rbuff, rlength);
             }
             else if ( action == Write )
             {
-                printk("HID Write");
                 ARG_UNUSED(rbuff);
                 ARG_UNUSED(*rlength);
                 Write_HID_DeviceB(wbuff, wlength);

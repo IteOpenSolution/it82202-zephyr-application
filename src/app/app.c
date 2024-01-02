@@ -6,7 +6,7 @@
 
 #include "../include/include.h"
 
-LOG_MODULE_REGISTER(app, 4);
+LOG_MODULE_REGISTER(app, LOG_LEVEL_INF);
 
 K_THREAD_STACK_DEFINE(thread_stack_acpi, 512);
 struct k_thread thread_acpi;
@@ -16,7 +16,7 @@ struct k_thread thread_thermalmgm;
 
 int main(void)
 {
-    printk("Hello IT82202, %s", EC_VER);
+    LOG_INF("Hello IT82202, %s", EC_VER);
 
     board_init();
 
@@ -32,7 +32,7 @@ int main(void)
 
     while(1)
     {
-        printk("main");
+        LOG_INF("main");
         k_msleep(1000);
     }
     

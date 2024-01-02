@@ -8,6 +8,8 @@
 #include <zephyr/dt-bindings/gpio/ite-it8xxx2-gpio.h>
 #include "../include/include.h"
 
+LOG_MODULE_REGISTER(ite_gpio, LOG_LEVEL_ERR);
+
 #define USEC_PSEC (CONFIG_SYS_CLOCK_TICKS_PER_SEC * 1000)
 
 #define HidIntDelay_1ms ((3 * USEC_PSEC) / 1000)	// 1ms, this delay time used for k_busy_waitms
@@ -19,38 +21,29 @@ void Hid_Interrupt_Pin_Toggle(void)
 {
 	int ret;
 
-	printk("Hid_Interrupt_Pin_Toggle");
-
 	ret = gpio_pin_toggle_dt(&led);
 	if (ret < 0) {
-		printk("gpio pin I2C1_INT toggle failed");
+		LOG_ERR("gpio pin I2C1_INT toggle failed");
 	}
 	k_busy_wait(HidIntDelay_1ms);
 
 	ret = gpio_pin_toggle_dt(&led);
 	if (ret < 0) {
-		printk("gpio pin I2C1_INT toggle failed");
+		LOG_ERR("gpio pin I2C1_INT toggle failed");
 	}
-#if 0
-	k_busy_wait(HidIntDelay_1ms);
-#endif
 }
 
 void ite_gpio_init(void)
 {
 	int ret;
 
-	printk("ite_gpio_init");
-
 	if (!gpio_is_ready_dt(&led)) {
-		printk("gpio pin I2C1_INT not ready");
-		// return 0;
+		LOG_ERR("gpio pin I2C1_INT not ready");
 	}
 
 	ret = gpio_pin_configure_dt(&led, GPIO_OUTPUT_ACTIVE);
 	if (ret < 0) {
-		printk("gpio pin I2C1_INT configure_dt failed");
-		// return 0;
+		LOG_ERR("gpio pin I2C1_INT configure_dt failed");
 	}
 }
 

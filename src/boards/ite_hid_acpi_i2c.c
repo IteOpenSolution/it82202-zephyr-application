@@ -24,16 +24,12 @@ uint8_t HidKBBuff[32] = {0};
 // HID
 void HidOverI2cReadCmdParser(uint8_t **rbuff, uint32_t *rlength)
 {
-    printk("HidOverI2cReadCmdParser");
-
     memset(HidOverI2cReadBuff, 0, sizeof(HidOverI2cReadBuff));
     
     if( HID_wRegIndex_B != 0)
     {
         service_SlaveI2C_B(HidOverI2c, Read, NULL, 0, HidOverI2cReadBuff, &Hid_I2c_rlength);
         
-        printk("Get back from HidOverI2cReadCmdParser");
-
         *rbuff = HidOverI2cReadBuff;
         *rlength = Hid_I2c_rlength;
 
@@ -45,7 +41,6 @@ void HidOverI2cReadCmdParser(uint8_t **rbuff, uint32_t *rlength)
     {
         if( HID_KB_Packet[0] != 0x00 )
         {
-            printk("Return KB Data");
             HID_OutBuf_B[0] = 0x0B;     /* Length = 0x000B */
             HID_OutBuf_B[1] = 0x00;
             HID_OutBuf_B[2] = (HID_KB_GENERIC + HID_OFFSET);
@@ -66,7 +61,6 @@ void HidOverI2cReadCmdParser(uint8_t **rbuff, uint32_t *rlength)
         }
         else
         {
-            printk("Return Clear KB Data");
             memset(HidKBBuff, 0, sizeof(HidKBBuff));
             *rbuff = HidKBBuff;
             *rlength = 24;
@@ -77,22 +71,16 @@ void HidOverI2cReadCmdParser(uint8_t **rbuff, uint32_t *rlength)
 
 void HidOverI2cWriteCmdParser(uint8_t wbuff[], uint32_t wlength)
 {
-    printk("HidOverI2cWriteCmdParser");
     service_SlaveI2C_B(HidOverI2c, Write, wbuff, wlength, NULL, NULL);
 }
 
 // ACPI
 void AcpiOverI2cReadCmdParser(uint8_t **rbuff, uint32_t *rlength)
 {
-    printk("AcpiOverI2cReadCmdParser");
-
     memset(AcpiOverI2cReadBuff, 0, sizeof(AcpiOverI2cReadBuff));
     Acpi_I2c_rlength = 0;
 
     service_SlaveI2C_B(AcpiOverI2c, Read, NULL, 0, AcpiOverI2cReadBuff, &Acpi_I2c_rlength);
-
-    printk("Get back from AcpiOverI2cReadCmdParser");
-
 
     *rbuff = AcpiOverI2cReadBuff;
     *rlength = Acpi_I2c_rlength;
@@ -102,6 +90,5 @@ void AcpiOverI2cReadCmdParser(uint8_t **rbuff, uint32_t *rlength)
 
 void AcpiOverI2cWriteCmdParser(uint8_t wbuff[], uint32_t wlength)
 {
-    printk("AcpiOverI2cWriteCmdParser");
     service_SlaveI2C_B(AcpiOverI2c, Write, wbuff, wlength, NULL, NULL);
 }
