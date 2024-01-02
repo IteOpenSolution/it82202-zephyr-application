@@ -4,3 +4,4 @@
 # Ignore zephyr binary files
 zephyr_*.bin
 
+.vscode/settings.json
